@@ -1,0 +1,131 @@
+{
+	"name": "nb_claims",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "mhksparkcluster",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "0cbf8fc2-100d-4202-8e84-87bd144fe72c"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/69610fcb-7e3e-4c49-8e10-bc0fa4d67fe2/resourceGroups/RG_MHK/providers/Microsoft.Synapse/workspaces/ws-mhk/bigDataPools/mhksparkcluster",
+				"name": "mhksparkcluster",
+				"type": "Spark",
+				"endpoint": "https://ws-mhk.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mhksparkcluster",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.5",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"def get_param(name, default_value):\n",
+					"    try:\n",
+					"        return spark.conf.get(name)\n",
+					"    except:\n",
+					"        return default_value\n",
+					"\n",
+					"\n",
+					"file_name   = get_param(\"file_name\", \"claims\")\n",
+					"source_path = get_param(\"source_path\", \"filesysmhk/raw/claims\")\n",
+					"target_path = get_param(\"target_path\", \"filesysmhk/staging/claims\")\n",
+					"run_id      = get_param(\"run_id\", \"MANUAL_RUN\")\n",
+					"\n",
+					"\n",
+					"print(file_name)\n",
+					"print(source_path)\n",
+					"print(target_path)\n",
+					"print(run_id)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.option(\"header\",True).csv(input_path)\n",
+					"\n",
+					"df.show()"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.functions import current_timestamp, lit, upper\n",
+					"\n",
+					"df2 = (\n",
+					"    df\n",
+					"    .dropDuplicates()\n",
+					"    .fillna(\"NA\")\n",
+					"    .withColumn(\"run_id\", lit(run_id))\n",
+					"    .withColumn(\"load_date\", current_timestamp())\n",
+					")\n",
+					"\n",
+					"df2.show()"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.functions import when\n",
+					"\n",
+					"df2 = df2.withColumn(\n",
+					"    \"claim_status\",\n",
+					"    when(df2.claim_amount > 1000, \"HIGH\").otherwise(\"LOW\")\n",
+					")"
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"display(df2)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df2.write.mode(\"overwrite\").parquet(output_path)"
+				],
+				"execution_count": 22
+			}
+		]
+	}
+}

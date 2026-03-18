@@ -41,6 +41,44 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Get Metadata1').output.exists",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "var_status",
+								"value": {
+									"value": "@concat('Filefound:',pipeline().parameters.p_file_name_foreach, 'Runid:',pipeline().parameters.p_run_id)",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
@@ -52,6 +90,15 @@
 			},
 			"p_tgt_path": {
 				"type": "string"
+			},
+			"p_run_id": {
+				"type": "string",
+				"defaultValue": "@variables('var_run_id')"
+			}
+		},
+		"variables": {
+			"var_status": {
+				"type": "String"
 			}
 		},
 		"annotations": []

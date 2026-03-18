@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0cbf8fc2-100d-4202-8e84-87bd144fe72c"
+				"spark.autotune.trackingId": "3050ea68-f200-45a0-acf6-06e95f033491"
 			}
 		},
 		"metadata": {
@@ -56,6 +56,8 @@
 					"        return spark.conf.get(name)\n",
 					"    except:\n",
 					"        return default_value\n",
+					"\n",
+					"\n",
 					"\n",
 					"\n",
 					"file_name   = get_param(\"file_name\", \"claims\")\n",

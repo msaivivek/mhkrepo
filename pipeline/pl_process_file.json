@@ -1,0 +1,59 @@
+{
+	"name": "pl_process_file",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_csv",
+						"type": "DatasetReference",
+						"parameters": {
+							"folder": {
+								"value": "@pipeline().parameters.p_src_path",
+								"type": "Expression"
+							},
+							"container": "filesysmhk",
+							"file": {
+								"value": "@concat(pipeline().parameters.p_file_name_foreach,'.csv')",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"exists"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"p_file_name_foreach": {
+				"type": "string"
+			},
+			"p_src_path": {
+				"type": "string"
+			},
+			"p_tgt_path": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

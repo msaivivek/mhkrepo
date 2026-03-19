@@ -1,0 +1,146 @@
+{
+	"name": "splittofiles",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "mhksparkcluster",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "4220de1e-b11d-4a05-a76c-ee505c0e9e2d"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/69610fcb-7e3e-4c49-8e10-bc0fa4d67fe2/resourceGroups/RG_MHK/providers/Microsoft.Synapse/workspaces/ws-mhk/bigDataPools/mhksparkcluster",
+				"name": "mhksparkcluster",
+				"type": "Spark",
+				"endpoint": "https://ws-mhk.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mhksparkcluster",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.5",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"input_path = f'abfss://filesysmhk@sasynapsemhk.dfs.core.windows.net/raw/countryfile.csv'"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.format(\"csv\") \\\n",
+					"    .option(\"header\", True) \\\n",
+					"    .load(\"abfss://filesysmhk@sasynapsemhk.dfs.core.windows.net/raw/countryfile.csv\")\n",
+					"\n",
+					"df.show()"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"countries = [row[\"country\"] for row in df.select(\"country\").distinct().collect()]"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"\n",
+					"base_path = \"abfss://filesysmhk@sasynapsemhk.dfs.core.windows.net/output\"\n",
+					"\n",
+					"for c in countries:\n",
+					"\n",
+					"    df.filter(df.country == c) \\\n",
+					"        .coalesce(1) \\\n",
+					"        .write.mode(\"overwrite\") \\\n",
+					"        .option(\"header\", True) \\\n",
+					"        .csv(f\"{base_path}/{c}\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"for c in countries:\n",
+					"    \n",
+					"    df_country = df.filter(df.country == c)\n",
+					"    \n",
+					"    df_country.coalesce(1).write \\\n",
+					"        .mode(\"overwrite\") \\\n",
+					"        .option(\"header\", True) \\\n",
+					"        .csv(f\"output/{c}\")"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.format(\"csv\") \\\n",
+					"    .option(\"header\", True) \\\n",
+					"    .load(\"abfss://filesysmhk@sasynapsemhk.dfs.core.windows.net/raw/countryfile.csv\")\n",
+					"\n",
+					"\n",
+					"countries = [row[\"country\"] for row in df.select(\"country\").distinct().collect()]\n",
+					"\n",
+					"base_path = \"abfss://filesysmhk@sasynapsemhk.dfs.core.windows.net/output\"\n",
+					"\n",
+					"\n",
+					"for c in countries:\n",
+					"\n",
+					"    temp_path = f\"{base_path}/{c}_temp\"\n",
+					"    final_path = f\"{base_path}/{c}.csv\"\n",
+					"\n",
+					"    # Step 1 write temp folder\n",
+					"    df.filter(df.country == c) \\\n",
+					"        .coalesce(1) \\\n",
+					"        .write.mode(\"overwrite\") \\\n",
+					"        .option(\"header\", True) \\\n",
+					"        .csv(temp_path)\n",
+					"\n",
+					"    # Step 2 get part file\n",
+					"    files = mssparkutils.fs.ls(temp_path)\n",
+					"\n",
+					"    part_file = [f.path for f in files if f.path.endswith(\".csv\")][0]\n",
+					"\n",
+					"    # Step 3 move to final file\n",
+					"    mssparkutils.fs.mv(part_file, final_path, True)\n",
+					"\n",
+					"    # Step 4 delete temp folder\n",
+					"    mssparkutils.fs.rm(temp_path, True)"
+				],
+				"execution_count": 7
+			}
+		]
+	}
+}

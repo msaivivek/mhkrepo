@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "bb58ee30-b72c-47c2-9964-ac8e673d4a78"
+				"spark.autotune.trackingId": "74e92369-0023-45f9-a583-f40cad8a8e8f"
 			}
 		},
 		"metadata": {
@@ -69,7 +69,7 @@
 				"source": [
 					"from notebookutils import mssparkutils\n",
 					"\n",
-					"if sourcepath != \"filesysmhk/raw/claims\":\n",
+					"if sourcepath != \"raw/claims\":\n",
 					"    print(\"Skipping notebook\")\n",
 					"    mssparkutils.notebook.exit(\"Skipped\")"
 				],

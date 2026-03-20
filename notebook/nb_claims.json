@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2faace85-2565-40fe-9c37-51b65a16dab8"
+				"spark.autotune.trackingId": "f280fc62-c09b-48d1-bc8d-b547a61ea104"
 			}
 		},
 		"metadata": {
@@ -50,6 +50,13 @@
 		"cells": [
 			{
 				"cell_type": "code",
+				"source": [
+					""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
 				"metadata": {
 					"tags": [
 						"parameters"
@@ -61,6 +68,17 @@
 					"sourcepath = \"\"\n",
 					"targetpath = \"\"\n",
 					"run_id = \"\""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import sys\n",
+					"\n",
+					"if sourcepath != \"raw/claims\":\n",
+					"    print(\"Skipping notebook\")\n",
+					"    sys.exit()"
 				],
 				"execution_count": null
 			},

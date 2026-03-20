@@ -110,7 +110,7 @@
 										"type": "Expression"
 									},
 									"p_src_path": {
-										"value": "@split(item().source_path,'/')[1]",
+										"value": "@split(item().source_path,'/')[0]",
 										"type": "Expression"
 									},
 									"p_tgt_path": {

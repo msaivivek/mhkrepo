@@ -116,6 +116,14 @@
 									"p_tgt_path": {
 										"value": "@item().target_path",
 										"type": "Expression"
+									},
+									"p_child_nb_container": {
+										"value": "@pipeline().parameters.p_child_nb_container",
+										"type": "Expression"
+									},
+									"p_child_nb_sa": {
+										"value": "@pipeline().parameters.p_child_nb_sa",
+										"type": "Expression"
 									}
 								}
 							}
@@ -132,6 +140,12 @@
 				"type": "string"
 			},
 			"p_con_file_path": {
+				"type": "string"
+			},
+			"p_child_nb_container": {
+				"type": "string"
+			},
+			"p_child_nb_sa": {
 				"type": "string"
 			}
 		},

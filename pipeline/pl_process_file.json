@@ -35,6 +35,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -76,6 +77,70 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Notebook1",
+							"type": "SynapseNotebook",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebook": {
+									"referenceName": "nb_claims",
+									"type": "NotebookReference"
+								},
+								"parameters": {
+									"containername": {
+										"value": {
+											"value": "@pipeline().parameters.p_child_nb_container",
+											"type": "Expression"
+										},
+										"type": "string"
+									},
+									"storageaccount": {
+										"value": {
+											"value": "@pipeline().parameters.p_child_nb_sa",
+											"type": "Expression"
+										},
+										"type": "string"
+									},
+									"sourcepath": {
+										"value": {
+											"value": "@pipeline().parameters.p_src_path",
+											"type": "Expression"
+										},
+										"type": "string"
+									},
+									"targetpath": {
+										"value": {
+											"value": "@pipeline().parameters.p_tgt_path",
+											"type": "Expression"
+										},
+										"type": "string"
+									},
+									"run_id": {
+										"value": {
+											"value": "@pipeline().parameters.p_run_id",
+											"type": "Expression"
+										},
+										"type": "string"
+									}
+								},
+								"snapshot": true
+							}
 						}
 					]
 				}
@@ -94,6 +159,12 @@
 			"p_run_id": {
 				"type": "string",
 				"defaultValue": "@variables('var_run_id')"
+			},
+			"p_child_nb_container": {
+				"type": "string"
+			},
+			"p_child_nb_sa": {
+				"type": "string"
 			}
 		},
 		"variables": {

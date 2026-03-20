@@ -119,7 +119,7 @@
 									},
 									"sourcepath": {
 										"value": {
-											"value": "@pipeline().parameters.p_src_path",
+											"value": "@pipeline().parameters.p_sourcepath_fornb",
 											"type": "Expression"
 										},
 										"type": "string"
@@ -139,7 +139,11 @@
 										"type": "string"
 									}
 								},
-								"snapshot": true
+								"snapshot": true,
+								"sparkPool": {
+									"referenceName": "mhksparkcluster",
+									"type": "BigDataPoolReference"
+								}
 							}
 						}
 					]
@@ -164,6 +168,9 @@
 				"type": "string"
 			},
 			"p_child_nb_sa": {
+				"type": "string"
+			},
+			"p_sourcepath_fornb": {
 				"type": "string"
 			}
 		},

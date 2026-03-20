@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a4cc1ea0-1c26-488a-8b85-55feb384a2db"
+				"spark.autotune.trackingId": "bb58ee30-b72c-47c2-9964-ac8e673d4a78"
 			}
 		},
 		"metadata": {
@@ -67,11 +67,11 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"import sys\n",
+					"from notebookutils import mssparkutils\n",
 					"\n",
-					"if sourcepath != \"raw/claims\":\n",
+					"if sourcepath != \"filesysmhk/raw/claims\":\n",
 					"    print(\"Skipping notebook\")\n",
-					"    sys.exit()"
+					"    mssparkutils.notebook.exit(\"Skipped\")"
 				],
 				"execution_count": null
 			},

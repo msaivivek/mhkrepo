@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f280fc62-c09b-48d1-bc8d-b547a61ea104"
+				"spark.autotune.trackingId": "a4cc1ea0-1c26-488a-8b85-55feb384a2db"
 			}
 		},
 		"metadata": {
@@ -48,13 +48,6 @@
 			"sessionKeepAliveTimeout": 30
 		},
 		"cells": [
-			{
-				"cell_type": "code",
-				"source": [
-					""
-				],
-				"execution_count": null
-			},
 			{
 				"cell_type": "code",
 				"metadata": {

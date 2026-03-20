@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "07dcf7e7-8fb1-4b4e-8a3a-2d56cf54a82e"
+				"spark.autotune.trackingId": "ad69cc51-b98a-477f-b87e-0da1234dd771"
 			}
 		},
 		"metadata": {
@@ -50,12 +50,17 @@
 		"cells": [
 			{
 				"cell_type": "code",
+				"metadata": {
+					"tags": [
+						"parameters"
+					]
+				},
 				"source": [
-					"containername = \"filesysmhk\"\n",
-					"storageaccount = \"sasynapsemhk\"\n",
-					"sourcepath = \"raw/claims\"\n",
-					"targetpath = \"staging/claims\"\n",
-					"run_id = \"manual\""
+					"containername = \"\"\n",
+					"storageaccount = \"\"\n",
+					"sourcepath = \"\"\n",
+					"targetpath = \"\"\n",
+					"run_id = \"\""
 				],
 				"execution_count": null
 			},

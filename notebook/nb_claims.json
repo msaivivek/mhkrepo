@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3050ea68-f200-45a0-acf6-06e95f033491"
+				"spark.autotune.trackingId": "07dcf7e7-8fb1-4b4e-8a3a-2d56cf54a82e"
 			}
 		},
 		"metadata": {
@@ -51,25 +51,19 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"def get_param(name, default_value):\n",
-					"    try:\n",
-					"        return spark.conf.get(name)\n",
-					"    except:\n",
-					"        return default_value\n",
+					"containername = \"filesysmhk\"\n",
+					"storageaccount = \"sasynapsemhk\"\n",
+					"sourcepath = \"raw/claims\"\n",
+					"targetpath = \"staging/claims\"\n",
+					"run_id = \"manual\""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
 					"\n",
-					"\n",
-					"\n",
-					"\n",
-					"file_name   = get_param(\"file_name\", \"claims\")\n",
-					"source_path = get_param(\"source_path\", \"filesysmhk/raw/claims\")\n",
-					"target_path = get_param(\"target_path\", \"filesysmhk/staging/claims\")\n",
-					"run_id      = get_param(\"run_id\", \"MANUAL_RUN\")\n",
-					"\n",
-					"\n",
-					"print(file_name)\n",
-					"print(source_path)\n",
-					"print(target_path)\n",
-					"print(run_id)"
+					"input_path = f'abfss://{containername}@{storageaccount}.dfs.core.windows.net/{sourcepath}.csv'"
 				],
 				"execution_count": null
 			},
@@ -80,7 +74,7 @@
 					"\n",
 					"df.show()"
 				],
-				"execution_count": 18
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -97,7 +91,7 @@
 					"\n",
 					"df2.show()"
 				],
-				"execution_count": 19
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -109,7 +103,7 @@
 					"    when(df2.claim_amount > 1000, \"HIGH\").otherwise(\"LOW\")\n",
 					")"
 				],
-				"execution_count": 21
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -124,9 +118,16 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"df2.write.mode(\"overwrite\").parquet(output_path)"
+					"outputpath = f'abfss://{containername}@{storageaccount}.dfs.core.windows.net/{targetpath}'"
 				],
-				"execution_count": 22
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df2.write.mode(\"overwrite\").parquet(outputpath)"
+				],
+				"execution_count": null
 			}
 		]
 	}

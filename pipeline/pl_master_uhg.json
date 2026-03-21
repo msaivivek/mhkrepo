@@ -157,7 +157,10 @@
 						"referenceName": "AutoResolveIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
 					},
-					"body": ""
+					"body": {
+						"value": "{\r\n \"run_id\": \"@{variables('var_run_id')}\",\r\n \"status\": \"SUCCESS\"\r\n}",
+						"type": "Expression"
+					}
 				}
 			}
 		],
